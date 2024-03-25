@@ -4,8 +4,7 @@ description: 'Get secrets from vault and expose as environment variables'
 inputs:
   create_secret_file:
     description: 'Create a file with secrets'
-    required: true
-    default: 'false'
+    required: false
 outputs:
   secrets_file:
     description: 'File with secrets'
@@ -14,9 +13,14 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: "Install YQ"
+      shell: bash
+      id: install-yq
+      run: pip install --no-cache-dir --upgrade yq
     - name: 'Create Secrets File'
       id: create_secrets
       shell: bash
       run: |
-        echo "File content" > secrets
-        echo "secrets_file=$(pwd)/secrets" >> $GITHUB_OUTPUT
+        SECRETS_FILE="${{ inputs.secrets_file }}"
+        echo "File content" > $SECRETS_FILE
+        echo "secrets_file=$(pwd)/$SECRETS_FILE" >> $GITHUB_OUTPUT
