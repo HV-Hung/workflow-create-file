@@ -22,7 +22,7 @@ runs:
       shell: bash
       run: |
         SECRETS_FILE="${{ inputs.create_secret_file }}"
-        if [ -z "$SECRETS_FILE" ];then
+        if [ -n "$SECRETS_FILE" ];then
           echo "File content" > $SECRETS_FILE
           echo "secrets_file=$(pwd)/$SECRETS_FILE" >> $GITHUB_OUTPUT
         fi
